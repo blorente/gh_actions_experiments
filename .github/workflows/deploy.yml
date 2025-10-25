@@ -1,0 +1,35 @@
+on:
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  build-for-deployment:
+    name: "Build Frontend For Deployment"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: "Upload very important file"
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifact
+          path: very_important_file.txt
+
+
+  deploy-one:
+    needs: [build-for-deployment]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v5
+        with:
+          name: build-artifact
+      - run: cat very_important_file.txt
+
+  deploy-two:
+    needs: [build-for-deployment]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v5
+        with:
+          name: build-artifact
+      - run: cat very_important_file.txt
+
