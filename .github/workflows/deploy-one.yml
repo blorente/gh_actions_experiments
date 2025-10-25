@@ -1,0 +1,16 @@
+on:
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  build-for-deployment:
+    uses: ./.github/workflows/build.yml
+  deploy-one:
+    needs: [build-for-deployment]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v5
+        with:
+          name: build-artifact
+      - run: cat very_important_file.txt
+
